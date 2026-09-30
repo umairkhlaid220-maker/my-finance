@@ -1,10 +1,2510 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My Finance</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Finance">
+
+<title>My Finance</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f6f8;
+  color:#111827;
+}
+
+.app{
+  max-width:600px;
+  margin:auto;
+  padding-bottom:40px;
+}
+
+header{
+  background:#111827;
+  color:white;
+  padding:22px 18px;
+  border-radius:0 0 24px 24px;
+}
+
+.header-title{
+  font-size:24px;
+  font-weight:700;
+}
+
+.header-sub{
+  font-size:13px;
+  opacity:.75;
+  margin-top:5px;
+}
+
+.month-box{
+  margin-top:18px;
+}
+
+select,
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  font-size:15px;
+  background:white;
+}
+
+textarea{
+  resize:vertical;
+  min-height:70px;
+}
+
+.section{
+  padding:16px;
+}
+
+.card{
+  background:white;
+  border-radius:18px;
+  padding:18px;
+  margin-bottom:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.balance-label{
+  font-size:13px;
+  color:#6b7280;
+}
+
+.balance{
+  font-size:32px;
+  font-weight:800;
+  margin-top:5px;
+}
+
+.summary-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.summary{
+  background:white;
+  padding:15px;
+  border-radius:15px;
+}
+
+.summary small{
+  color:#6b7280;
+}
+
+.summary strong{
+  display:block;
+  margin-top:5px;
+  font-size:19px;
+}
+
+.green{
+  color:#15803d;
+}
+
+.red{
+  color:#dc2626;
+}
+
+.blue{
+  color:#2563eb;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:12px;
+}
+
+button{
+  border:0;
+  border-radius:12px;
+  padding:13px 16px;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.primary{
+  width:100%;
+  background:#111827;
+  color:white;
+}
+
+.secondary{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+.danger{
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.type-buttons,
+.payment-buttons,
+.category-buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.type-btn,
+.payment-btn,
+.category-btn{
+  background:#f3f4f6;
+  color:#374151;
+}
+
+.active{
+  background:#111827 !important;
+  color:white !important;
+}
+
+.form-group{
+  margin-bottom:13px;
+}
+
+.form-label{
+  font-size:13px;
+  font-weight:600;
+  margin-bottom:6px;
+  display:block;
+}
+
+.transaction{
+  border-bottom:1px solid #e5e7eb;
+  padding:13px 0;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.transaction:last-child{
+  border-bottom:0;
+}
+
+.transaction-desc{
+  font-weight:600;
+}
+
+.transaction-meta{
+  font-size:12px;
+  color:#6b7280;
+  margin-top:4px;
+}
+
+.transaction-amount{
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.expense{
+  color:#dc2626;
+}
+
+.income{
+  color:#15803d;
+}
+
+.delete-btn{
+  font-size:11px;
+  padding:6px 9px;
+  margin-top:5px;
+  background:#fee2e2;
+  color:#b91c1c;
+}
+
+.emi{
+  border:1px solid #e5e7eb;
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:10px;
+}
+
+.emi-title{
+  font-weight:700;
+}
+
+.emi-info{
+  font-size:13px;
+  color:#6b7280;
+  margin-top:5px;
+  line-height:1.6;
+}
+
+.emi-actions{
+  display:flex;
+  gap:7px;
+  margin-top:10px;
+}
+
+.emi-actions button{
+  flex:1;
+}
+
+.progress{
+  height:7px;
+  background:#e5e7eb;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.progress-bar{
+  height:100%;
+  background:#111827;
+}
+
+.empty{
+  text-align:center;
+  color:#6b7280;
+  padding:20px;
+}
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#111827;
+  color:white;
+  padding:12px 18px;
+  border-radius:12px;
+  display:none;
+  z-index:9999;
+}
+
+.loading{
+  position:fixed;
+  inset:0;
+  background:rgba(255,255,255,.75);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9998;
+}
+
+.loading-box{
+  background:white;
+  padding:20px;
+  border-radius:15px;
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+@media(max-width:420px){
+  .balance{
+    font-size:28px;
+  }
+
+  .summary strong{
+    font-size:17px;
+  }
+
+  .section{
+    padding:12px;
+  }
+}
+</style>
 </head>
+
 <body>
-    <h1>💰 My Finance</h1>
-    <p>My Finance app is working!</p>
+
+<div class="app">
+
+<header>
+
+  <div class="header-title">
+    💰 My Finance
+  </div>
+
+  <div class="header-sub">
+    Personal CFO & Daily Finance Tracker
+  </div>
+
+  <div class="month-box">
+    <select id="monthSelect"></select>
+  </div>
+
+</header>
+
+
+<div class="section">
+
+  <!-- BALANCE -->
+
+  <div class="card">
+
+    <div class="balance-label">
+      Current Available Balance
+    </div>
+
+    <div class="balance" id="balance">
+      AED 0.00
+    </div>
+
+  </div>
+
+
+  <!-- MONTHLY SUMMARY -->
+
+  <div class="summary-grid">
+
+    <div class="summary">
+      <small>Income</small>
+      <strong class="green" id="income">
+        AED 0.00
+      </strong>
+    </div>
+
+    <div class="summary">
+      <small>Expenses</small>
+      <strong class="red" id="expenses">
+        AED 0.00
+      </strong>
+    </div>
+
+    <div class="summary">
+      <small>Monthly Net</small>
+      <strong id="net">
+        AED 0.00
+      </strong>
+    </div>
+
+    <div class="summary">
+      <small>Today's Spending</small>
+      <strong class="red" id="today">
+        AED 0.00
+      </strong>
+    </div>
+
+  </div>
+
+
+  <!-- EMI -->
+
+  <div class="card">
+
+    <div class="section-title">
+      EMI Forecast & Manager
+    </div>
+
+    <div class="summary-grid">
+
+      <div class="summary">
+        <small>Active EMI</small>
+        <strong id="emiCount">0</strong>
+      </div>
+
+      <div class="summary">
+        <small>Monthly Commitment</small>
+        <strong id="emiMonthly">AED 0</strong>
+      </div>
+
+      <div class="summary">
+        <small>Total Remaining</small>
+        <strong id="emiRemaining">AED 0</strong>
+      </div>
+
+    </div>
+
+    <div style="margin-top:15px" id="emiList"></div>
+
+  </div>
+
+
+  <!-- ADD EMI -->
+
+  <div class="card">
+
+    <div class="section-title">
+      Add EMI Purchase
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">
+        Purchase
+      </label>
+
+      <input
+        id="emiPurchase"
+        placeholder="e.g. Laptop"
+      >
+    </div>
+
+
+    <div class="form-group">
+      <label class="form-label">
+        Total Purchase Amount
+      </label>
+
+      <input
+        id="emiTotal"
+        type="number"
+        step="0.01"
+        placeholder="2400"
+        oninput="calculateEMI()"
+      >
+    </div>
+
+
+    <div class="form-group">
+      <label class="form-label">
+        Start Date
+      </label>
+
+      <input
+        id="emiStart"
+        type="date"
+      >
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Duration
+      </label>
+
+      <select
+        id="emiDuration"
+        onchange="calculateEMI()"
+      >
+
+        <option value="4">4 Months</option>
+        <option value="6">6 Months</option>
+        <option value="12">12 Months</option>
+        <option value="custom">Custom</option>
+        <option value="open">Open-ended</option>
+
+      </select>
+
+    </div>
+
+
+    <div
+      class="form-group"
+      id="customDurationBox"
+      style="display:none"
+    >
+
+      <label class="form-label">
+        Custom Duration (Months)
+      </label>
+
+      <input
+        id="customDuration"
+        type="number"
+        min="1"
+        oninput="calculateEMI()"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Monthly Installment
+      </label>
+
+      <input
+        id="emiMonthlyInput"
+        type="number"
+        step="0.01"
+        placeholder="400"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Payment Method
+      </label>
+
+      <div class="payment-buttons">
+
+        <button
+          class="payment-btn active"
+          onclick="selectEMIPayment(this,'Cash')"
+        >
+          Cash
+        </button>
+
+        <button
+          class="payment-btn"
+          onclick="selectEMIPayment(this,'Card')"
+        >
+          Card
+        </button>
+
+        <button
+          class="payment-btn"
+          onclick="selectEMIPayment(this,'Bank')"
+        >
+          Bank
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Description
+      </label>
+
+      <textarea
+        id="emiDescription"
+        placeholder="Optional"
+      ></textarea>
+
+    </div>
+
+
+    <button
+      class="primary"
+      onclick="saveEMI()"
+    >
+      Add EMI Purchase
+    </button>
+
+  </div>
+
+
+  <!-- ADD TRANSACTION -->
+
+  <div class="card">
+
+    <div class="section-title">
+      Add Transaction
+    </div>
+
+
+    <div class="form-group">
+
+      <div class="type-buttons">
+
+        <button
+          id="expenseBtn"
+          class="type-btn active"
+          onclick="setType('Expense')"
+        >
+          Expense
+        </button>
+
+        <button
+          id="incomeBtn"
+          class="type-btn"
+          onclick="setType('Income')"
+        >
+          Income
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Date
+      </label>
+
+      <input
+        id="transactionDate"
+        type="date"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Amount
+      </label>
+
+      <input
+        id="transactionAmount"
+        type="number"
+        step="0.01"
+        placeholder="0.00"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Category
+      </label>
+
+      <div
+        class="category-buttons"
+        id="categoryButtons"
+      ></div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Payment
+      </label>
+
+      <div class="payment-buttons">
+
+        <button
+          class="payment-btn active"
+          onclick="selectPayment(this,'Cash')"
+        >
+          Cash
+        </button>
+
+        <button
+          class="payment-btn"
+          onclick="selectPayment(this,'Card')"
+        >
+          Card
+        </button>
+
+        <button
+          class="payment-btn"
+          onclick="selectPayment(this,'Bank')"
+        >
+          Bank
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label class="form-label">
+        Description
+      </label>
+
+      <input
+        id="transactionDescription"
+        placeholder="e.g. Grocery"
+      >
+
+    </div>
+
+
+    <button
+      class="primary"
+      onclick="saveTransaction()"
+    >
+      Save Transaction
+    </button>
+
+  </div>
+
+
+  <!-- EXPENSE BREAKDOWN -->
+
+  <div class="card">
+
+    <div class="section-title">
+      Expense Breakdown
+    </div>
+
+    <div id="breakdown"></div>
+
+  </div>
+
+
+  <!-- TRANSACTIONS -->
+
+  <div class="card">
+
+    <div class="section-title">
+      Transactions
+    </div>
+
+
+    <div class="form-group">
+
+      <input
+        id="search"
+        placeholder="Search description..."
+        oninput="renderTransactions()"
+      >
+
+    </div>
+
+
+    <div id="transactions"></div>
+
+  </div>
+
+</div>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<div class="loading" id="loading">
+
+  <div class="loading-box">
+    Loading...
+  </div>
+
+</div>
+
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbwTQzmy4OraIPTYA9IJ-ase-qmh3uaopjht5wchVt6KpkNjAflG4mA1k4tQtJ-vk6tE/exec";
+
+
+let transactions = [];
+let emis = [];
+let settings = {};
+
+let selectedType = "Expense";
+let selectedPayment = "Cash";
+let selectedEMIPayment = "Cash";
+let selectedCategory = "Food";
+
+const categories = [
+  "Food",
+  "Transport",
+  "Rent",
+  "Bills",
+  "Shopping",
+  "EMI",
+  "Medical",
+  "Education",
+  "Family",
+  "Salary",
+  "Other"
+];
+
+
+// ============================================================
+// API
+// ============================================================
+
+function api(params){
+
+  return new Promise(function(resolve,reject){
+
+    const query =
+      Object.keys(params)
+        .map(function(key){
+
+          return encodeURIComponent(key)
+            + "="
+            + encodeURIComponent(
+                params[key] ?? ""
+              );
+
+        })
+        .join("&");
+
+
+    const url =
+      API + "?" + query;
+
+
+    fetch(url)
+
+      .then(function(response){
+
+        return response.json();
+
+      })
+
+      .then(function(data){
+
+        if(data.ok === false){
+
+          reject(
+            new Error(
+              data.error || "Something went wrong"
+            )
+          );
+
+          return;
+        }
+
+        resolve(data);
+
+      })
+
+      .catch(function(error){
+
+        reject(error);
+
+      });
+
+  });
+
+}
+
+
+// ============================================================
+// LOAD DATA
+// ============================================================
+
+async function loadData(){
+
+  showLoading(true);
+
+  try{
+
+    const result =
+      await api({
+        action:"getData"
+      });
+
+
+    transactions =
+      result.transactions || [];
+
+    emis =
+      result.emis || [];
+
+    settings =
+      result.settings || {};
+
+
+    setupCategories();
+
+    setupMonthSelector();
+
+    renderAll();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to connect to Google Sheet."
+    );
+
+  }
+  finally{
+
+    showLoading(false);
+
+  }
+
+}
+
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+
+function renderAll(){
+
+  renderBalance();
+
+  renderSummary();
+
+  renderEMI();
+
+  renderBreakdown();
+
+  renderTransactions();
+
+}
+
+
+// ============================================================
+// MONTH
+// ============================================================
+
+function currentMonth(){
+
+  const d =
+    new Date();
+
+  return d.getFullYear()
+    + "-"
+    + String(
+        d.getMonth()+1
+      ).padStart(2,"0");
+
+}
+
+
+function setupMonthSelector(){
+
+  const select =
+    document.getElementById(
+      "monthSelect"
+    );
+
+
+  const months =
+    new Set();
+
+
+  months.add(
+    currentMonth()
+  );
+
+
+  transactions.forEach(function(t){
+
+    if(t.date){
+
+      months.add(
+        t.date.substring(0,7)
+      );
+
+    }
+
+  });
+
+
+  const sorted =
+    Array.from(months)
+      .sort()
+      .reverse();
+
+
+  select.innerHTML =
+    sorted.map(function(month){
+
+      return `
+        <option value="${month}">
+          ${formatMonth(month)}
+        </option>
+      `;
+
+    }).join("");
+
+
+  select.value =
+    currentMonth();
+
+
+  select.onchange =
+    renderAll;
+
+}
+
+
+function formatMonth(month){
+
+  const d =
+    new Date(
+      month + "-01T12:00:00"
+    );
+
+  return d.toLocaleDateString(
+    "en-US",
+    {
+      month:"long",
+      year:"numeric"
+    }
+  );
+
+}
+
+
+// ============================================================
+// BALANCE
+// ============================================================
+
+function renderBalance(){
+
+  const startingCash =
+    Number(
+      settings["Starting Cash"] || 0
+    );
+
+
+  let balance =
+    startingCash;
+
+
+  transactions.forEach(function(t){
+
+    if(t.type === "Income"){
+
+      balance +=
+        Number(t.amount);
+
+    }
+    else{
+
+      balance -=
+        Number(t.amount);
+
+    }
+
+  });
+
+
+  document.getElementById(
+    "balance"
+  ).textContent =
+    money(balance);
+
+}
+
+
+// ============================================================
+// SUMMARY
+// ============================================================
+
+function renderSummary(){
+
+  const month =
+    document.getElementById(
+      "monthSelect"
+    ).value;
+
+
+  const monthly =
+    transactions.filter(function(t){
+
+      return t.date &&
+        t.date.substring(0,7) ===
+        month;
+
+    });
+
+
+  let income = 0;
+  let expenses = 0;
+
+
+  monthly.forEach(function(t){
+
+    if(t.type === "Income"){
+
+      income +=
+        Number(t.amount);
+
+    }
+    else{
+
+      expenses +=
+        Number(t.amount);
+
+    }
+
+  });
+
+
+  const today =
+    new Date();
+
+
+  const todayString =
+    today.getFullYear()
+    + "-"
+    + String(
+        today.getMonth()+1
+      ).padStart(2,"0")
+    + "-"
+    + String(
+        today.getDate()
+      ).padStart(2,"0");
+
+
+  const todaySpending =
+    transactions
+      .filter(function(t){
+
+        return t.date === todayString
+          && t.type === "Expense";
+
+      })
+      .reduce(function(total,t){
+
+        return total +
+          Number(t.amount);
+
+      },0);
+
+
+  document.getElementById(
+    "income"
+  ).textContent =
+    money(income);
+
+
+  document.getElementById(
+    "expenses"
+  ).textContent =
+    money(expenses);
+
+
+  document.getElementById(
+    "net"
+  ).textContent =
+    money(income - expenses);
+
+
+  document.getElementById(
+    "today"
+  ).textContent =
+    money(todaySpending);
+
+}
+
+
+// ============================================================
+// EMI
+// ============================================================
+
+function renderEMI(){
+
+  const active =
+    emis.filter(function(e){
+
+      return e.status === "Active"
+        && Number(e.remainingAmount) > 0;
+
+    });
+
+
+  const monthly =
+    active.reduce(function(total,e){
+
+      return total +
+        Number(e.monthlyInstallment || 0);
+
+    },0);
+
+
+  const remaining =
+    active.reduce(function(total,e){
+
+      return total +
+        Number(e.remainingAmount || 0);
+
+    },0);
+
+
+  document.getElementById(
+    "emiCount"
+  ).textContent =
+    active.length;
+
+
+  document.getElementById(
+    "emiMonthly"
+  ).textContent =
+    money(monthly);
+
+
+  document.getElementById(
+    "emiRemaining"
+  ).textContent =
+    money(remaining);
+
+
+  const container =
+    document.getElementById(
+      "emiList"
+    );
+
+
+  if(!emis.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        No EMI purchases yet.
+      </div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    emis.map(function(e){
+
+      const paid =
+        Number(e.paidAmount || 0);
+
+      const total =
+        Number(e.totalAmount || 0);
+
+      const percent =
+        total > 0
+          ? Math.min(
+              100,
+              (paid / total) * 100
+            )
+          : 0;
+
+
+      return `
+
+        <div class="emi">
+
+          <div class="emi-title">
+            ${escapeHTML(e.purchase)}
+          </div>
+
+          <div class="emi-info">
+
+            Total:
+            <b>${money(total)}</b>
+            <br>
+
+            Monthly:
+            <b>${money(e.monthlyInstallment)}</b>
+            <br>
+
+            Remaining:
+            <b>${money(e.remainingAmount)}</b>
+            <br>
+
+            Duration:
+            ${escapeHTML(e.duration || "")}
+            <br>
+
+            Payment:
+            ${escapeHTML(e.payment || "")}
+
+          </div>
+
+
+          <div class="progress">
+
+            <div
+              class="progress-bar"
+              style="width:${percent}%"
+            ></div>
+
+          </div>
+
+
+          <div
+            class="emi-actions"
+          >
+
+            ${
+              e.status === "Active"
+              ?
+              `
+              <button
+                class="primary"
+                onclick="payEMI('${e.id}')"
+              >
+                Pay EMI
+              </button>
+              `
+              :
+              `
+              <button
+                class="secondary"
+                disabled
+              >
+                Completed
+              </button>
+              `
+            }
+
+
+            <button
+              class="danger"
+              onclick="removeEMI('${e.id}')"
+            >
+              Delete
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+// ============================================================
+// CALCULATE EMI
+// ============================================================
+
+function calculateEMI(){
+
+  const duration =
+    document.getElementById(
+      "emiDuration"
+    ).value;
+
+
+  const customBox =
+    document.getElementById(
+      "customDurationBox"
+    );
+
+
+  customBox.style.display =
+    duration === "custom"
+      ? "block"
+      : "none";
+
+
+  if(
+    duration === "open"
+  ){
+
+    return;
+
+  }
+
+
+  let months =
+    Number(duration);
+
+
+  if(duration === "custom"){
+
+    months =
+      Number(
+        document.getElementById(
+          "customDuration"
+        ).value
+      );
+
+  }
+
+
+  const total =
+    Number(
+      document.getElementById(
+        "emiTotal"
+      ).value
+    );
+
+
+  if(
+    total > 0 &&
+    months > 0
+  ){
+
+    document.getElementById(
+      "emiMonthlyInput"
+    ).value =
+      (total / months)
+        .toFixed(2);
+
+  }
+
+}
+
+
+// ============================================================
+// SAVE EMI
+// ============================================================
+
+async function saveEMI(){
+
+  const purchase =
+    document.getElementById(
+      "emiPurchase"
+    ).value.trim();
+
+
+  const total =
+    Number(
+      document.getElementById(
+        "emiTotal"
+      ).value
+    );
+
+
+  const startDate =
+    document.getElementById(
+      "emiStart"
+    ).value;
+
+
+  const durationSelect =
+    document.getElementById(
+      "emiDuration"
+    ).value;
+
+
+  let duration =
+    durationSelect;
+
+
+  if(durationSelect === "custom"){
+
+    duration =
+      document.getElementById(
+        "customDuration"
+      ).value;
+
+  }
+
+
+  if(durationSelect === "open"){
+
+    duration =
+      "Open-ended";
+
+  }
+
+
+  const monthly =
+    Number(
+      document.getElementById(
+        "emiMonthlyInput"
+      ).value
+    );
+
+
+  const description =
+    document.getElementById(
+      "emiDescription"
+    ).value;
+
+
+  if(!purchase){
+
+    toast(
+      "Enter the purchase name."
+    );
+
+    return;
+
+  }
+
+
+  if(!total || total <= 0){
+
+    toast(
+      "Enter the total amount."
+    );
+
+    return;
+
+  }
+
+
+  if(!monthly || monthly <= 0){
+
+    toast(
+      "Enter the monthly installment."
+    );
+
+    return;
+
+  }
+
+
+  if(!startDate){
+
+    toast(
+      "Select a start date."
+    );
+
+    return;
+
+  }
+
+
+  showLoading(true);
+
+
+  try{
+
+    await api({
+
+      action:
+        "addEMI",
+
+      purchase:
+        purchase,
+
+      totalAmount:
+        total,
+
+      monthlyInstallment:
+        monthly,
+
+      startDate:
+        startDate,
+
+      duration:
+        duration,
+
+      payment:
+        selectedEMIPayment,
+
+      description:
+        description
+
+    });
+
+
+    document.getElementById(
+      "emiPurchase"
+    ).value = "";
+
+    document.getElementById(
+      "emiTotal"
+    ).value = "";
+
+    document.getElementById(
+      "emiMonthlyInput"
+    ).value = "";
+
+    document.getElementById(
+      "emiDescription"
+    ).value = "";
+
+
+    toast(
+      "EMI added successfully."
+    );
+
+
+    await loadData();
+
+  }
+  catch(error){
+
+    toast(
+      error.message
+    );
+
+  }
+  finally{
+
+    showLoading(false);
+
+  }
+
+}
+
+
+// ============================================================
+// PAY EMI
+// ============================================================
+
+async function payEMI(id){
+
+  const emi =
+    emis.find(function(e){
+
+      return String(e.id) ===
+        String(id);
+
+    });
+
+
+  if(!emi){
+
+    return;
+
+  }
+
+
+  let amount =
+    prompt(
+      "Payment amount:",
+      Number(
+        emi.monthlyInstallment
+      ).toFixed(2)
+    );
+
+
+  if(amount === null){
+
+    return;
+
+  }
+
+
+  amount =
+    Number(amount);
+
+
+  if(!amount || amount <= 0){
+
+    toast(
+      "Enter a valid amount."
+    );
+
+    return;
+
+  }
+
+
+  let date =
+    prompt(
+      "Payment date (YYYY-MM-DD):",
+      todayDate()
+    );
+
+
+  if(date === null){
+
+    return;
+
+  }
+
+
+  showLoading(true);
+
+
+  try{
+
+    await api({
+
+      action:
+        "payEMI",
+
+      emiId:
+        id,
+
+      paymentAmount:
+        amount,
+
+      paymentDate:
+        date
+
+    });
+
+
+    toast(
+      "EMI payment recorded."
+    );
+
+
+    await loadData();
+
+  }
+  catch(error){
+
+    toast(
+      error.message
+    );
+
+  }
+  finally{
+
+    showLoading(false);
+
+  }
+
+}
+
+
+// ============================================================
+// DELETE EMI
+// ============================================================
+
+async function removeEMI(id){
+
+  if(
+    !confirm(
+      "Delete this EMI purchase?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  showLoading(true);
+
+
+  try{
+
+    await api({
+
+      action:
+        "deleteEMI",
+
+      emiId:
+        id
+
+    });
+
+
+    toast(
+      "EMI deleted."
+    );
+
+
+    await loadData();
+
+  }
+  catch(error){
+
+    toast(
+      error.message
+    );
+
+  }
+  finally{
+
+    showLoading(false);
+
+  }
+
+}
+
+
+// ============================================================
+// TRANSACTION TYPE
+// ============================================================
+
+function setType(type){
+
+  selectedType =
+    type;
+
+
+  document
+    .getElementById(
+      "expenseBtn"
+    )
+    .classList.toggle(
+      "active",
+      type === "Expense"
+    );
+
+
+  document
+    .getElementById(
+      "incomeBtn"
+    )
+    .classList.toggle(
+      "active",
+      type === "Income"
+    );
+
+}
+
+
+// ============================================================
+// PAYMENT
+// ============================================================
+
+function selectPayment(
+  button,
+  payment
+){
+
+  selectedPayment =
+    payment;
+
+
+  document
+    .querySelectorAll(
+      ".payment-buttons button"
+    )
+    .forEach(function(btn){
+
+      if(
+        btn.onclick &&
+        btn.textContent.trim() !== ""
+      ){
+
+        btn.classList.remove(
+          "active"
+        );
+
+      }
+
+    });
+
+
+  button.classList.add(
+    "active"
+  );
+
+}
+
+
+// ============================================================
+// EMI PAYMENT
+// ============================================================
+
+function selectEMIPayment(
+  button,
+  payment
+){
+
+  selectedEMIPayment =
+    payment;
+
+
+  const parent =
+    button.parentElement;
+
+
+  parent
+    .querySelectorAll(
+      "button"
+    )
+    .forEach(function(btn){
+
+      btn.classList.remove(
+        "active"
+      );
+
+    });
+
+
+  button.classList.add(
+    "active"
+  );
+
+}
+
+
+// ============================================================
+// CATEGORIES
+// ============================================================
+
+function setupCategories(){
+
+  const container =
+    document.getElementById(
+      "categoryButtons"
+    );
+
+
+  container.innerHTML =
+    categories.map(function(category){
+
+      return `
+
+        <button
+          class="category-btn ${
+            category === selectedCategory
+              ? "active"
+              : ""
+          }"
+          onclick="selectCategory(this,'${category}')"
+        >
+          ${category}
+        </button>
+
+      `;
+
+    }).join("");
+
+}
+
+
+function selectCategory(
+  button,
+  category
+){
+
+  selectedCategory =
+    category;
+
+
+  document
+    .querySelectorAll(
+      ".category-btn"
+    )
+    .forEach(function(btn){
+
+      btn.classList.remove(
+        "active"
+      );
+
+    });
+
+
+  button.classList.add(
+    "active"
+  );
+
+}
+
+
+// ============================================================
+// SAVE TRANSACTION
+// ============================================================
+
+async function saveTransaction(){
+
+  const date =
+    document.getElementById(
+      "transactionDate"
+    ).value;
+
+
+  const amount =
+    Number(
+      document.getElementById(
+        "transactionAmount"
+      ).value
+    );
+
+
+  const description =
+    document.getElementById(
+      "transactionDescription"
+    ).value;
+
+
+  if(!date){
+
+    toast(
+      "Select a date."
+    );
+
+    return;
+
+  }
+
+
+  if(!amount || amount <= 0){
+
+    toast(
+      "Enter a valid amount."
+    );
+
+    return;
+
+  }
+
+
+  showLoading(true);
+
+
+  try{
+
+    await api({
+
+      action:
+        "addTransaction",
+
+      date:
+        date,
+
+      type:
+        selectedType,
+
+      amount:
+        amount,
+
+      category:
+        selectedCategory,
+
+      payment:
+        selectedPayment,
+
+      description:
+        description
+
+    });
+
+
+    document.getElementById(
+      "transactionAmount"
+    ).value = "";
+
+
+    document.getElementById(
+      "transactionDescription"
+    ).value = "";
+
+
+    toast(
+      "Transaction saved."
+    );
+
+
+    await loadData();
+
+  }
+  catch(error){
+
+    toast(
+      error.message
+    );
+
+  }
+  finally{
+
+    showLoading(false);
+
+  }
+
+}
+
+
+// ============================================================
+// BREAKDOWN
+// ============================================================
+
+function renderBreakdown(){
+
+  const month =
+    document.getElementById(
+      "monthSelect"
+    ).value;
+
+
+  const data = {};
+
+
+  transactions
+    .filter(function(t){
+
+      return t.type === "Expense"
+        && t.date.substring(0,7) ===
+        month;
+
+    })
+    .forEach(function(t){
+
+      const category =
+        t.category ||
+        "Other";
+
+
+      data[category] =
+        (data[category] || 0)
+        + Number(t.amount);
+
+    });
+
+
+  const container =
+    document.getElementById(
+      "breakdown"
+    );
+
+
+  const entries =
+    Object.entries(data)
+      .sort(function(a,b){
+
+        return b[1] - a[1];
+
+      });
+
+
+  if(!entries.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        No expenses this month.
+      </div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    entries.map(function(item){
+
+      return `
+
+        <div style="
+          display:flex;
+          justify-content:space-between;
+          padding:9px 0;
+          border-bottom:1px solid #eee;
+        ">
+
+          <span>
+            ${escapeHTML(item[0])}
+          </span>
+
+          <b class="red">
+            ${money(item[1])}
+          </b>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+// ============================================================
+// TRANSACTIONS
+// ============================================================
+
+function renderTransactions(){
+
+  const month =
+    document.getElementById(
+      "monthSelect"
+    ).value;
+
+
+  const search =
+    document.getElementById(
+      "search"
+    ).value
+    .toLowerCase();
+
+
+  const list =
+    transactions
+      .filter(function(t){
+
+        return t.date &&
+          t.date.substring(0,7) ===
+          month;
+
+      })
+      .filter(function(t){
+
+        return (
+          !search ||
+          String(
+            t.description || ""
+          )
+          .toLowerCase()
+          .includes(search)
+        );
+
+      })
+      .sort(function(a,b){
+
+        return String(b.date)
+          .localeCompare(
+            String(a.date)
+          );
+
+      });
+
+
+  const container =
+    document.getElementById(
+      "transactions"
+    );
+
+
+  if(!list.length){
+
+    container.innerHTML =
+      `<div class="empty">
+        No transactions found.
+      </div>`;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    list.map(function(t){
+
+      const isIncome =
+        t.type === "Income";
+
+
+      return `
+
+        <div class="transaction">
+
+          <div>
+
+            <div class="transaction-desc">
+              ${escapeHTML(
+                t.description ||
+                t.category ||
+                "Transaction"
+              )}
+            </div>
+
+            <div class="transaction-meta">
+
+              ${formatDate(t.date)}
+              ·
+              ${escapeHTML(t.category || "")}
+              ·
+              ${escapeHTML(t.payment || "")}
+
+            </div>
+
+            <button
+              class="delete-btn"
+              onclick="removeTransaction('${t.id}')"
+            >
+              Delete
+            </button>
+
+          </div>
+
+
+          <div
+            class="transaction-amount ${
+              isIncome
+                ? "income"
+                : "expense"
+            }"
+          >
+
+            ${isIncome ? "+" : "-"}
+            ${money(t.amount)}
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
+
+}
+
+
+// ============================================================
+// DELETE TRANSACTION
+// ============================================================
+
+async function removeTransaction(id){
+
+  if(
+    !confirm(
+      "Delete this transaction?"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  showLoading(true);
+
+
+  try{
+
+    await api({
+
+      action:
+        "deleteTransaction",
+
+      id:
+        id
+
+    });
+
+
+    toast(
+      "Transaction deleted."
+    );
+
+
+    await loadData();
+
+  }
+  catch(error){
+
+    toast(
+      error.message
+    );
+
+  }
+  finally{
+
+    showLoading(false);
+
+  }
+
+}
+
+
+// ============================================================
+// HELPERS
+// ============================================================
+
+function money(amount){
+
+  return "AED " +
+    Number(amount || 0)
+      .toLocaleString(
+        "en-AE",
+        {
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        }
+      );
+
+}
+
+
+function formatDate(date){
+
+  if(!date){
+    return "";
+  }
+
+
+  const d =
+    new Date(
+      date + "T12:00:00"
+    );
+
+
+  return d.toLocaleDateString(
+    "en-GB"
+  );
+
+}
+
+
+function todayDate(){
+
+  const d =
+    new Date();
+
+
+  return d.getFullYear()
+    + "-"
+    + String(
+        d.getMonth()+1
+      ).padStart(2,"0")
+    + "-"
+    + String(
+        d.getDate()
+      ).padStart(2,"0");
+
+}
+
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
+}
+
+
+function toast(message){
+
+  const el =
+    document.getElementById(
+      "toast"
+    );
+
+
+  el.textContent =
+    message;
+
+
+  el.style.display =
+    "block";
+
+
+  setTimeout(function(){
+
+    el.style.display =
+      "none";
+
+  },3000);
+
+}
+
+
+function showLoading(show){
+
+  document.getElementById(
+    "loading"
+  ).style.display =
+    show
+      ? "flex"
+      : "none";
+
+}
+
+
+// ============================================================
+// START
+// ============================================================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function(){
+
+    document.getElementById(
+      "transactionDate"
+    ).value =
+      todayDate();
+
+
+    document.getElementById(
+      "emiStart"
+    ).value =
+      todayDate();
+
+
+    setupCategories();
+
+    loadData();
+
+  }
+);
+
+</script>
+
 </body>
 </html>
